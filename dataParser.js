@@ -4,7 +4,7 @@ const ID_TO_PLAYER = [
  ['39978' , 'K-12'],
  ['9653'  , 'L'],
  ['38145' , 'Malmortis'],
- ['39404' , 'Daisuki'],
+ ['46801' , 'Daisuki'],
  ['24347' , 'Marah'],
  ['23023' , 'Plinci'],
  ['135710', 'Flint'],
