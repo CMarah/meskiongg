@@ -16,7 +16,7 @@ const getBracketInfo = bracket_id => {
           if (!acc[entrant2Id] && entrant2Id) acc[entrant2Id] = {sets: [], games: []}; 
           if (entrant1Score > 0) acc[entrant1Id].games = acc[entrant1Id].games.concat(repeatString(entrant1Score, entrant2Id));
           if (entrant2Score > 0) acc[entrant2Id].games = acc[entrant2Id].games.concat(repeatString(entrant2Score, entrant1Id));
-          if (winnerId && loserId) acc[winnerId].sets = acc[winnerId].sets.concat(loserId);
+          if (winnerId && loserId && entrant1Score >= 0 && entrant2Score >= 0) acc[winnerId].sets = acc[winnerId].sets.concat(loserId);
           return acc;
         }, {})
     }));
