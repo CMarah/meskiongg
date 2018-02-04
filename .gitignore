@@ -1,3 +1,6 @@
+table.txt
+package-lock*
+
 # Logs
 logs
 *.log
