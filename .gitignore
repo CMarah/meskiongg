@@ -1,5 +1,6 @@
 table.txt
 package-lock*
+*.swp
 
 # Logs
 logs

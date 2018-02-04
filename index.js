@@ -2,7 +2,10 @@ const getSetsFromURL = require('./setsFromURL');
 const dataParser = require('./dataParser');
 
 const URLS = [
- 'https://smash.gg/tournament/redfox-series-ii',
+  "https://smash.gg/tournament/dashback-ii/events/melee-singles/standings",
+  "https://smash.gg/tournament/liga-smash-crush-encounters-3-jornada/events/melee-singles/standings",
+  "https://smash.gg/tournament/johns-cup-ii/events/melee-singles/standings",
+  "https://smash.gg/tournament/smashcorts-1/events/melee-singles/standings",
 ];
 
 const getAndMerge = async (urls) => {
