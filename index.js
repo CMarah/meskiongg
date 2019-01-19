@@ -1,31 +1,24 @@
-const getSetsFromURL = require('./setsFromURL');
-const dataParser = require('./dataParser');
+const fs = require('fs');
+const getResults = require('./setsFromURLs.js');
+const dataParser = require('./dataParser.js');
 
-const URLS = [
-  "https://smash.gg/tournament/dashback-ii/events/melee-singles/standings",
-  "https://smash.gg/tournament/liga-smash-crush-encounters-3-jornada/events/melee-singles/standings",
-  "https://smash.gg/tournament/johns-cup-ii/events/melee-singles/standings",
-  "https://smash.gg/tournament/smashcorts-1/events/melee-singles/standings",
-];
-
-const getAndMerge = async (urls) => {
-  const sets_per_url = await Promise.all(urls.map(url => getSetsFromURL(url)));
-  return sets_per_url.reduce((merged, sets) =>
-    Object.entries(sets).reduce((acc, [player, wins]) =>
-      Object.assign(
-        acc, { [player]: (acc[player] || []).concat(wins), }
-      )
-    , merged)
-  , {});
-};
-
-const main = async () => {
-  const results = await getAndMerge(URLS);
-  const parsed_data = dataParser(results);
-  require('fs').writeFile('table.txt', parsed_data, err => {
-    if (err) throw err;
-    console.log('Saved!');
+try {
+  const URLs = fs.readFileSync('./URLs.txt', 'utf8').split('\n').filter(x => x);
+  getResults(URLs).then(results => {
+    console.log('API queries completed, processing sets.');
+    fs.writeFile('table.txt', dataParser(results), err => {
+      if (err) throw err;
+      else console.log('Results saved in table.txt.');
+    });
+    const players_list = Object.entries(results).map(
+      x => `${x[0]}, ${x[1].name}`
+    );
+    fs.writeFile('players.txt', players_list.join('\n'), err => {
+      if (err) throw err;
+      else console.log('Full players list written in players.txt');
+    });
   });
-};
-
-main();
+} catch (err) {
+  console.error('"URLs.txt" is missing or has an incorrect format (see README)');
+  return;
+}

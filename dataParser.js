@@ -1,81 +1,86 @@
-const ID_TO_PLAYER = [
- ['22900' , 'Trifasia'],
- ['22556' , 'Over'],
- ['39978' , 'K-12'],
- ['9653'  , 'L'],
- ['38145' , 'Malmortis'],
- ['46801' , 'Daisuki'],
- ['24347' , 'Marah'],
- ['23023' , 'Plinci'],
- ['135710', 'Flint'],
- ['27599' , 'Skam'],
- ['149000', 'Joshi'],
- ['48697' , 'Gblade'],
- ['13552' , 'Saix'],
- ['145843', 'Majoras'],
- ['29759' , 'Kyo'],
- ['150662', 'Alinkandro'],
- ['277187', 'Danieru'],
- ['150127', 'Kei'],
- ['12513' , 'Alexandr'],
- ['153926', 'Axarth'],
- ['36713' , 'Metafalo'],
- ['15053' , 'Iu2king'],
- ['9974'  , 'Nex'],
- ['38223' , 'Helmet' ],
- ['323092', 'Seigal'],
- ['31958' , 'Corazon'],
- ['69420' , 'Lustrike'],
- ['21913' , 'Toerq'],
- ['154496', 'Jukes'],
- ['154023', 'Nich'],
- ['150076', 'MILF'],
- ['39555' , 'Wiru'],
- ['14705' , 'Kisame'],
- ['39457' , 'Tazz'],
- ['287914', 'Seru'],
- ['39942' , 'Willyyy'],
- ['153943', 'Linkeiro'],
- ['36363' , 'Mr Tom'],
- ['146415', 'Meskion'],
- ['507274', 'Yuyin'],
- ['31702' , 'Talvi'],
- ['312734', 'DaGomSa'],
- ['158740', 'Verdal'],
- ['31208' , 'Joukai'],
- ['257479', 'Tbag'],
- ['324141', 'DNL'],
- ['35857' , 'Zeone'],
- ['312492', 'Mark'],
- ['499113', 'R5'],
- ['135827', 'Sho'],
- ['278157', 'Kpi'],
- ['47598' , 'Pikkususi'],
- ['312507', 'Kakarot'],
- ['69185' , 'Manu'],
- ['312468', 'VGS'],
- ['256261', 'Regi'],
- ['312984',  'Sr. Gi'],
- ['148525', 'PloPloPlo'],
- ['149646', 'Uruu'],
-];
-
+const ID_TO_PLAYER = []
+/*
+[
+  ['277130', 'Magc'],
+  ['146415', 'meskion'],
+  ['153926', 'Axarth'],
+  ['453974', 'Are$'],
+  ['24347', 'Marah'],
+  ['14705', 'Kisame'],
+  ['311713', 'Weeb'],
+  ['277110', 'Nefasto'],
+  ['154496', 'Jukes'],
+  ['13552', 'SaiX'],
+  ['486046', 'Tony-hp'],
+  ['520179', 'ivan'],
+  ['31702', 'Talvi'],
+  ['145843', 'Mäjoras'],
+  ['9974', 'Nex'],
+  ['507274', 'Yuyin'],
+  ['36713', 'Metafalo'],
+  ['135827', 'Sho'],
+  ['46502', 'Xardov'],
+  ['277187', 'Danieru'],
+  ['287914', 'Seru'],
+  ['69420', 'Lustrike'],
+  ['36306', 'Gambs'],
+  ['323092', 'El Moreno'],
+  ['348205', 'Decade'],
+  ['353741', 'lloni$'],
+  ['700439', 'Zeinkiu'],
+  ['256261', 'Regi'],
+  ['5583', 'Animaster3000'],
+  ['15053', 'IuDKing'],
+  ['22900', 'Trif'],
+  ['46987', 'Chobin'],
+  ['23023', 'Plinci'],
+  ['312734', 'DaGomSa'],
+  ['48697', 'GBlade'],
+  ['705256', 'JiMBo'],
+  ['39978', 'K-12'],
+  ['499113', 'R5'],
+  ['9653', 'Liax'],
+  ['31208', 'Joukai'],
+  ['257479', 'TBAG'],
+  ['150076', 'MILF'],
+  ['38145', 'Malmortis'],
+  ['158740', 'Verdal'],
+  ['31958', '12MoraSeira'],
+  ['677835', 'Kaminari'],
+  ['22556', 'Overtriforce'],
+  ['425375', 'Shikiso'],
+  ['27594', 'PiÇÀ0'],
+  ['395968', 'Dunxter'],
+  ['681160', 'Emily'],
+  ['150650', 'Xilio'],
+  ['229832', 'Yoshim'],
+  ['499183', 'Across'],
+  ['156096', 'Tito MC'],
+  ['46801', 'Daisuki'],
+  ['12513', 'alexndr'],
+  ['29759', 'Kyo'],
+  ['21913', 'Toerq'],
+  ['452811', 'Isku'],
+  ['147391', 'Ender'],
+  ['324141', 'DNL'],
+  ['150127', 'Kei'],
+  ['679093', 'taz0'],
+];*/
 const ORDERED_IDs = ID_TO_PLAYER.map(x => x[0]);
 
 module.exports = results => {
-  const player_wins = ID_TO_PLAYER.map(([ id, player ]) =>
-    [player].concat((results[id] || []).reduce(
-      (all_wins, win) => {
-        const win_str = win.toString();
-        if (!ORDERED_IDs.includes(win_str)) return all_wins;
-        all_wins[ORDERED_IDs.indexOf(win_str)] += 1;
-        return all_wins;
-      }
-    , new Array(Object.keys(ID_TO_PLAYER).length).fill(0)))
+  const id_list = ORDERED_IDs.length ? ORDERED_IDs : Object.entries(results).map(x => x[0]);
+  if (!ORDERED_IDs.length) console.log('No ID/player list provided, using all found players.');
+  const player_wins = id_list.map(
+    id => results[id].sets.reduce((wins, win_id) => {
+      const win_id_str = win_id.toString();
+      if (id_list.includes(win_id_str)) wins[id_list.indexOf(win_id_str)] += 1;
+      return wins;
+    }, new Array(id_list.length).fill(0))
   );
   return player_wins.reduce(
-    (table, player_win, row) => table + player_win.reduce(
-      (line, el, col) => line + (col === row+1 ? '-' : String(el)) + '\t'
+    (table, player_win, row) => table + results[id_list[row]].name + '\t' + player_win.reduce(
+      (line, el, col) => line + (col === row ? '-' : String(el)) + '\t'
     , '') + '\n'
   , '');
 };

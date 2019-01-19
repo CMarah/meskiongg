@@ -1,9 +1,13 @@
 # meskiongg
 
-This script generates a table with the provided players' head-to-head scores, using smashgg's API.
+This script generates a table with players' head-to-head scores, using smashgg's API.
 
-To use it, modify index.js (add the tournaments to consider) and dataParser.js (with each player's name and smashgg ID).<br>
-After setting this up, running index.js (using node) will create table.txt, ready to be dropped into excel/drive.
+Before use, you must provide:
 
-To obtain a player's smashgg ID, navigate to their profile and it will be shown in the URL.<br>
-As for the tournament URLS, they should be formatted as "https://smash.gg/tournament/tournament-name".
+URLs.txt; where each line is the link to a smash.gg tournament's melee singles event. e.g.:
+https://smash.gg/tournament/smashcorts-9/events/melee-singles
+
+Optionally, inside dataParser.js, you can modify ID_TO_PLAYER adding players using the format:
+[ smashgg_id, player_tagname ]
+(see the file for a commented example).
+If ID_TO_PLAYER array is not empty, only the players contained in it will be used, and their order will dictate how the resulting table is arranged. If empty, table.txt will contain results for every player found. To retrieve a players' smashgg ID, you can look inside players.txt after a first run.
